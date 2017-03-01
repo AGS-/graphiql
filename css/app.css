@@ -356,10 +356,51 @@
   white-space: nowrap;
 }
 
+.graphiql-container .favorite-items {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  overflow-y: scroll;
+  padding-left: 0px;
+}
+
+.graphiql-container .favorite-items > li {
+  cursor: pointer;
+  display: block;
+  margin: none;
+  overflow: hidden;
+  padding: 4px 20px 6px 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.graphiql-container .favorite-items .favorite-item {
+  display: block;
+  float: left;
+  font-family:
+    'Consolas',
+    'Inconsolata',
+    'Droid Sans Mono',
+    'Monaco',
+    monospace;
+  font-size: 13px;
+  padding-right: 5px;
+}
+
+.graphiql-container .favorite-items .query {
+  color: #006400;
+  font-weight: bold;
+}
+
+.graphiql-container .favorite-items > li:nth-child(even) {
+  background-color: #f9f5f5;
+}
+
 .graphiql-container .execute-options > li.selected,
 .graphiql-container .toolbar-menu-items > li.hover,
 .graphiql-container .toolbar-menu-items > li:active,
 .graphiql-container .toolbar-menu-items > li:hover,
+.graphiql-container .favorite-items > li:active,
+.graphiql-container .favorite-items > li:hover,
 .graphiql-container .toolbar-select-options > li.hover,
 .graphiql-container .toolbar-select-options > li:active,
 .graphiql-container .toolbar-select-options > li:hover {
@@ -371,7 +412,7 @@
   display: inline;
   fill: #666;
   margin: 0 -6px 0 6px;
-  pointer-events: none;
+ pointer-events: none;
   vertical-align: middle;
 }
 

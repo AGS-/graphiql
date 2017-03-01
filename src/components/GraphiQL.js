@@ -16,6 +16,7 @@ import {
 } from 'graphql';
 
 import { ExecuteButton } from './ExecuteButton';
+import { FavoritesPanel } from './FavoritesPanel';
 import { ToolbarButton } from './ToolbarButton';
 import { ToolbarGroup } from './ToolbarGroup';
 import { ToolbarMenu, ToolbarMenuItem } from './ToolbarMenu';
@@ -75,6 +76,8 @@ export class GraphiQL extends React.Component {
     // Cache the storage instance
     this._storage = props.storage || window.localStorage;
 
+    // Load favorites
+    const favorites = JSON.parse(this._storageGet('favorites'));
     // Determine the initial query to display.
     const query =
       props.query !== undefined ? props.query :
@@ -113,6 +116,7 @@ export class GraphiQL extends React.Component {
       docExplorerOpen:
         (this._storageGet('docExplorerOpen') === 'true') || false,
       docExplorerWidth: Number(this._storageGet('docExplorerWidth')) || 350,
+      favorites: favorites ? favorites : [],
       isWaitingForResponse: false,
       subscription: null,
       ...queryFacts
@@ -222,6 +226,7 @@ export class GraphiQL extends React.Component {
     this._storageSet('variableEditorHeight', this.state.variableEditorHeight);
     this._storageSet('docExplorerWidth', this.state.docExplorerWidth);
     this._storageSet('docExplorerOpen', this.state.docExplorerOpen);
+    this._storageSet('favorites', JSON.stringify(this.state.favorites));
   }
 
   render() {
@@ -238,6 +243,11 @@ export class GraphiQL extends React.Component {
           onClick={this.handlePrettifyQuery}
           title="Prettify Query"
           label="Prettify"
+        />
+        <ToolbarButton
+          onClick={this.handleFavoriteQuery}
+          title="Favorite Query"
+          label="Favorite"
         />
       </GraphiQL.Toolbar>;
 
@@ -331,6 +341,7 @@ export class GraphiQL extends React.Component {
               {footer}
             </div>
           </div>
+          <FavoritesPanel favorites={this.state.favorites} />
         </div>
         <div className={docExplorerWrapClasses} style={docWrapStyle}>
           <div
@@ -652,6 +663,18 @@ export class GraphiQL extends React.Component {
     }
 
     this.handleRunQuery(operationName);
+  }
+
+  handleFavoriteQuery = () => {
+    const editor = this.getQueryEditor();
+    const query = editor.getValue();
+    const favorite = {
+      type: 'query',
+      query,
+    };
+    const favorites = this.state.favorites;
+    favorites.unshift(favorite);
+    this.setState({ favorites });
   }
 
   handlePrettifyQuery = () => {
