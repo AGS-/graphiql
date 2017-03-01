@@ -147,6 +147,7 @@
   position: relative;
 }
 
+.graphiql-container .favorite-items-title,
 .graphiql-container .variable-editor-title {
   background: #eeeeee;
   border-bottom: 1px solid #d6d6d6;

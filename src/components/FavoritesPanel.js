@@ -41,13 +41,12 @@ export class FavoritesPanel extends React.Component {
     }
 
     return (
-      <div
-        style={currentStyle} >
+      <div>
         <div
-          className="variable-editor-title">
+          className="favorite-items-title">
           {'Favorites'}
         </div>
-        <ul className="favorite-items">
+        <ul style={currentStyle} className="favorite-items">
           {favorites.map((favorite, i) => {
             return (
               <li key={i}>
