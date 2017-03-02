@@ -110,6 +110,9 @@ export class GraphiQL extends React.Component {
       operationName,
       response: props.response,
       editorFlex: Number(this._storageGet('editorFlex')) || 1,
+      favoritesPanelOpen: true,
+      favoritesPanelHeight:
+        Number(this._storageGet('favroritesPanelHeight')) || 200,
       variableEditorOpen: Boolean(variables),
       variableEditorHeight:
         Number(this._storageGet('variableEditorHeight')) || 200,
@@ -224,6 +227,7 @@ export class GraphiQL extends React.Component {
     this._storageSet('operationName', this.state.operationName);
     this._storageSet('editorFlex', this.state.editorFlex);
     this._storageSet('variableEditorHeight', this.state.variableEditorHeight);
+    this._storageSet('favoritesPanelHeight', this.state.favoritesPanelHeight);
     this._storageSet('docExplorerWidth', this.state.docExplorerWidth);
     this._storageSet('docExplorerOpen', this.state.docExplorerOpen);
     this._storageSet('favorites', JSON.stringify(this.state.favorites));
@@ -264,6 +268,11 @@ export class GraphiQL extends React.Component {
     };
     const docExplorerWrapClasses = 'docExplorerWrap' +
       (this.state.docExplorerWidth < 200 ? ' doc-explorer-narrow' : '');
+
+    const favoritesOpen = this.state.favoritesPanelOpen;
+    const favoritesStyle = {
+      height: favoritesOpen ? this.state.favoritesPanelHeight : 0
+    };
 
     const variableOpen = this.state.variableEditorOpen;
     const variableStyle = {
@@ -341,7 +350,17 @@ export class GraphiQL extends React.Component {
               {footer}
             </div>
           </div>
-          <FavoritesPanel favorites={this.state.favorites} />
+          <div>
+            <div
+              className="favorite-items-title"
+              onMouseDown={this.handleFavoritesResizeStart}>
+              {'Favorites'}
+            </div>
+            <FavoritesPanel
+              favorites={this.state.favorites}
+              favoritesStyle={favoritesStyle}
+            />
+          </div>
         </div>
         <div className={docExplorerWrapClasses} style={docWrapStyle}>
           <div
@@ -844,6 +863,41 @@ export class GraphiQL extends React.Component {
     let onMouseUp = () => {
       if (!this.state.docExplorerOpen) {
         this.setState({ docExplorerWidth: hadWidth });
+      }
+
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+      onMouseMove = null;
+      onMouseUp = null;
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  }
+
+  handleFavoritesResizeStart = downEvent => {
+    downEvent.preventDefault();
+
+    let didMove = false;
+    const wasOpen = this.state.favoritesPanelOpen;
+    const hadHeight = this.state.favoritesPanelHeight;
+
+    let onMouseMove = moveEvent => {
+      if (moveEvent.buttons === 0) {
+        return onMouseUp();
+      }
+
+      didMove = true;
+
+      this.setState({
+        favoritesPanelOpen: true,
+        favoritesPanelHeight: hadHeight
+      });
+    };
+
+    let onMouseUp = () => {
+      if (!didMove) {
+        this.setState({ favoritesPanelOpen: !wasOpen });
       }
 
       document.removeEventListener('mousemove', onMouseMove);

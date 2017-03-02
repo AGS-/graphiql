@@ -18,8 +18,7 @@ export class FavoritesPanel extends React.Component {
 
   static propTypes = {
     favorites: PropTypes.array,
-    height: PropTypes.number,
-    visible: PropTypes.bool
+    favoritesStyle: PropTypes.object
   }
 
   constructor(props) {
@@ -28,35 +27,17 @@ export class FavoritesPanel extends React.Component {
   }
 
   render() {
-    const favorites = this.props.favorites;
-    const visibleStyle = {
-      height: this.props.height ? this.props.height : '200px'
-    };
-    const hiddenStyle = {
-      height: '0px'
-    };
-    let currentStyle = visibleStyle;
-    if (this.props.visible !== undefined && this.props.visible === false) {
-      currentStyle = hiddenStyle;
-    }
-
     return (
-      <div>
-        <div
-          className="favorite-items-title">
-          {'Favorites'}
-        </div>
-        <ul style={currentStyle} className="favorite-items">
-          {favorites.map((favorite, i) => {
-            return (
-              <li key={i}>
-                <div className="favorite-item query">{'QUERY'}</div>
-                <div className="favorite-item">{favorite.query}</div>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+      <ul style={this.props.favoritesStyle} className="favorite-items">
+        {this.props.favorites.map((favorite, i) => {
+          return (
+            <li key={i}>
+              <div className="favorite-item query">{'QUERY'}</div>
+              <div className="favorite-item">{favorite.query}</div>
+            </li>
+          );
+        })}
+      </ul>
     );
   }
 }
