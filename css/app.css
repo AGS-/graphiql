@@ -357,6 +357,11 @@
   white-space: nowrap;
 }
 
+.graphiql-container .favorite-div {
+  text-align: center;
+  vertical-align: middle;
+}
+
 .graphiql-container .favorite-items {
   margin-top: 0px;
   margin-bottom: 0px;

@@ -692,8 +692,12 @@ export class GraphiQL extends React.Component {
       query,
     };
     const favorites = this.state.favorites;
-    favorites.unshift(favorite);
-    this.setState({ favorites });
+    if (!JSON.stringify(favorites).includes(JSON.stringify(favorite))) {
+      favorites.unshift(favorite);
+      this.setState({ favorites });
+    } else {
+      throw new Error('Query already in favorites!');
+    }
   }
 
   handlePrettifyQuery = () => {

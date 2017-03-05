@@ -27,8 +27,11 @@ export class FavoritesPanel extends React.Component {
   }
 
   render() {
-    return (
-      <ul style={this.props.favoritesStyle} className="favorite-items">
+    const emptyMessage = (
+      <div className="favorite-div">{'You haven\'t saved any queries!'}</div>
+    );
+    const favoritesList = (
+      <ul className="favorite-items">
         {this.props.favorites.map((favorite, i) => {
           return (
             <li key={i}>
@@ -38,6 +41,11 @@ export class FavoritesPanel extends React.Component {
           );
         })}
       </ul>
+    );
+    return (
+      <div style={this.props.favoritesStyle}>
+        {this.props.favorites.length ? favoritesList : emptyMessage}
+      </div>
     );
   }
 }
